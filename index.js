@@ -15,11 +15,15 @@ function getDirectoryContent(req, res, next) {
         var baseUrl  = `${protocol}://${hostname}/read/`;
 
         if (err) { return next(err); }
-        res.locals.filenames = files.map((file) => {
-            return {
-                link: baseUrl + btoa(`${directoryPathStorage}/${file}`),
-                filename: file
-            };
+        res.locals.filenames = files.filter((filename) => {
+
+            if(filename.match(/^(?!\.).*$/)) {
+                return {
+                    link: baseUrl + btoa(`${directoryPathStorage}/${filename}`),
+                    filename: filename
+                };
+            }
+
         });
 
         next();
@@ -53,7 +57,8 @@ app.set("views", __dirname + "/views")
 app.get('/', getDirectoryContent, function (req, res) {
 
     res.render(__dirname + "/views/log.html", {
-        files:  res.locals.filenames
+        files:  res.locals.filenames,
+        hasFiles: res.locals.filenames.length > 0
     });
 
 });
