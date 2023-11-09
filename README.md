@@ -1,4 +1,4 @@
-# Simple log viewer
+# Docker log webviewer
 
 Simple log viewer made with nodejs. 
 Logs must be stored on `storage`.
