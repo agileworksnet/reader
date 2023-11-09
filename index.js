@@ -39,7 +39,7 @@ function getDirectoryContent(req, res, next) {
     res.locals.filenames = files.map(function (filename) {
 
         return {
-            link: baseUrl + btoa(`${directoryPathStorage}/${filename}`),
+            link: baseUrl + btoa(filename),
             filename: filename
         };
     });
@@ -82,6 +82,8 @@ app.get('/', getDirectoryContent, function (req, res) {
 });
 
 app.get('/read/:file', getFileContent, (req, res) => {
+
+    console.log(res.locals.file);
 
     res.render(__dirname + "/views/file.html", {
         file: res.locals.file
