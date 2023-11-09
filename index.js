@@ -19,7 +19,7 @@ function getDirectoryContent(req, res, next) {
             if (fs.statSync(filePath).isFile()) {
 
                 if (filename.match(/^(?!\.).*$/)) {
-                    files.push(filePath);                
+                    files.push(filePath);
                 }
 
             } else if (fs.statSync(filePath).isDirectory()) {
@@ -34,18 +34,14 @@ function getDirectoryContent(req, res, next) {
     // Ordenar archivos por orden alfabético
     res.locals.filenames = files.sort((a, b) => a - b);
 
-    const hostname = req.headers.host;
-    const protocol = req.protocol;
-    const baseUrl = `${protocol}://${hostname}/read/`;
-
     // Construimos los objetos de archivo
     res.locals.filenames = files.map(function (filename) {
 
         return {
-            link: baseUrl + btoa(filename),
+            link: 'read/' + btoa(filename),
             filename: filename
         };
-        
+
     });
 
     next();
