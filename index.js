@@ -8,38 +8,52 @@ const app = express();
 const directoryPathStorage = path.join(__dirname, 'storage');
 
 function getDirectoryContent(req, res, next) {
-    fs.readdir(directoryPathStorage, function (err, files) {
 
-        var hostname = req.headers.host;
-        var protocol = req.protocol;
-        var baseUrl  = `${protocol}://${hostname}/read/`;
+    const files = [];
 
-        if (err) { return next(err); }
-        res.locals.filenames = files.filter((filename) => {
+    function readAllFilesRecursively(directoryPath) {
 
-            if(filename.match(/^(?!\.).*$/)) {
-                return filename;
+        fs.readdirSync(directoryPath).forEach((filename) => {
+            const filePath = directoryPath + "/" + filename;
+
+            if (fs.statSync(filePath).isFile()) {
+
+                if (filename.match(/^(?!\.).*$/)) {
+                    files.push(filePath);                
+                }
+
+            } else if (fs.statSync(filePath).isDirectory()) {
+                readAllFilesRecursively(filePath);
             }
-
         });
+    }
 
-        res.locals.filenames = res.locals.filenames.map(function(filename) {
-            return {
-                link: baseUrl + btoa(`${directoryPathStorage}/${filename}`),
-                filename: filename
-            };
-        });
+    // Cargamos los archivos
+    readAllFilesRecursively(directoryPathStorage);
 
-        next();
+    const hostname = req.headers.host;
+    const protocol = req.protocol;
+    const baseUrl = `${protocol}://${hostname}/read/`;
+
+    // Construimos los objetos de archivo
+    res.locals.filenames = files.map(function (filename) {
+
+        return {
+            link: baseUrl + btoa(`${directoryPathStorage}/${filename}`),
+            filename: filename
+        };
     });
+
+    next();
+
 }
 
 function getFileContent(req, res, next) {
 
     var fileName = atob(req.params.file);
 
-    fs.readFile(fileName, {encoding: 'utf-8'}, (err, data) => {
-        
+    fs.readFile(fileName, { encoding: 'utf-8' }, (err, data) => {
+
         if (err) {
             console.log(err);
         }
@@ -61,7 +75,7 @@ app.set("views", __dirname + "/views")
 app.get('/', getDirectoryContent, function (req, res) {
 
     res.render(__dirname + "/views/log.html", {
-        files:  res.locals.filenames,
+        files: res.locals.filenames,
         hasFiles: res.locals.filenames.length > 0
     });
 
@@ -72,7 +86,7 @@ app.get('/read/:file', getFileContent, (req, res) => {
     res.render(__dirname + "/views/file.html", {
         file: res.locals.file
     });
-    
+
 });
 
 //Iniciando el servidor, escuchando...
