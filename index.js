@@ -31,6 +31,9 @@ function getDirectoryContent(req, res, next) {
     // Cargamos los archivos
     readAllFilesRecursively(directoryPathStorage);
 
+    // Ordenar archivos por orden alfabético
+    res.locals.filenames = files.sort((a, b) => a - b);
+
     const hostname = req.headers.host;
     const protocol = req.protocol;
     const baseUrl = `${protocol}://${hostname}/read/`;
@@ -42,6 +45,7 @@ function getDirectoryContent(req, res, next) {
             link: baseUrl + btoa(filename),
             filename: filename
         };
+        
     });
 
     next();
