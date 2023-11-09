@@ -74,7 +74,7 @@ app.set("views", __dirname + "/views")
 
 app.get('/', getDirectoryContent, function (req, res) {
 
-    res.render(__dirname + "/views/log.html", {
+    res.render(__dirname + "/views/index.html", {
         files: res.locals.filenames,
         hasFiles: res.locals.filenames.length > 0
     });
@@ -85,7 +85,7 @@ app.get('/read/:file', getFileContent, (req, res) => {
 
     console.log(res.locals.file);
 
-    res.render(__dirname + "/views/file.html", {
+    res.render(__dirname + "/views/show.html", {
         file: res.locals.file
     });
 
