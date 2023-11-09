@@ -1,7 +1,13 @@
-<div class="container">
-    <div class="d-flex flex-column justify-content-center align-items-start">
-        <pre>
-            <%= file %>
-        </pre>
-    </div>
-</div>
+<%- include('partials/head.ejs') %>
+
+<seciton class="content">
+    <div class="container-fluid">
+        <div class="px-4 py-5 mt-3 text-left">
+            <pre>
+                <%= file %>
+            </pre>
+        </div>
+    </div>    
+</seciton>
+
+<%- include('partials/footer.ejs') %>

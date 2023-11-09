@@ -1,27 +1,37 @@
 <%- include('partials/head.ejs') %>
 
-<div class="container">
-    <div class="d-flex flex-column justify-content-center align-items-start">
+<section class="logs">
 
-        <% if (hasFiles == true) { %>
-            
-            <div class="list-group" style="width: 100%;">
-                <% files.forEach(function(file){ %>
-                    <a href="<%= `${file.link}` %>" class="list-group-item list-group-item-action my-2" aria-current="true">
-                        <%= file.filename %>
-                    </a>
-                <% }) %>
-            </div>
-
-        <% } else { %>
-
-            <p>
-                There aren't files.
-            </p>
-
-        <% } %>
-
+    <div class="container mt-5">
+        <div class="d-flex flex-column justify-content-center align-items-start">
+    
+            <% if (hasFiles == true) { %>
+                
+                <div class="row">
+                    <% files.forEach(function(file){ %>
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <a href="<%= `${file.link}` %>" class="list-group-item list-group-item-action my-2" aria-current="true">
+                                        <%= file.filename %>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+    
+            <% } else { %>
+    
+                <p>
+                    There aren't files.
+                </p>
+    
+            <% } %>
+    
+        </div>
     </div>
-</div>
+
+</section>
 
 <%- include('partials/footer.ejs') %>
