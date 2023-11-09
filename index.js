@@ -4,14 +4,8 @@ const fs = require('fs');
 const express = require('express');
 const app = express();
 
-if(!process.env.DIRECTORY_STORAGE_LOG) {
-    console.log('DIRECTORY_STORAGE_LOG var is not configured');
-    process.exit(1);
-}
-
 //joining path of directory 
-// const directoryPathStorage = path.join(__dirname, 'storage');
-const directoryPathStorage = path.join(__dirname, process.env.DIRECTORY_STORAGE_LOG);
+const directoryPathStorage = path.join(__dirname, 'storage');
 
 function getDirectoryContent(req, res, next) {
     fs.readdir(directoryPathStorage, function (err, files) {
