@@ -12,12 +12,24 @@ services:
 
   api:
     container_name: log-viewer
-    image: jmeiracorbal/log-viewer
+    image: log-viewer
     restart: always
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    env_file:
+      - .env
     volumes:
       - ./storage:/usr/src/app/storage
     ports:
       - "3000:3000"
 
 
+```
+
+Use the `.env` file to config base url.
+
+```
+# Replace by you env url
+BASE_URL_PATH=http://localhost:3000/
 ```

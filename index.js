@@ -6,6 +6,7 @@ const app = express();
 
 //joining path of directory 
 const directoryPathStorage = path.join(__dirname, 'storage');
+const baseUrlPath = process.env.BASE_URL_PATH || "";
 
 function getDirectoryContent(req, res, next) {
 
@@ -28,6 +29,7 @@ function getDirectoryContent(req, res, next) {
         });
     }
 
+
     // Cargamos los archivos
     readAllFilesRecursively(directoryPathStorage);
 
@@ -38,7 +40,7 @@ function getDirectoryContent(req, res, next) {
     res.locals.filenames = files.map(function (filename) {
 
         return {
-            link: 'read/' + btoa(filename),
+            link: baseUrlPath + '/read/' + btoa(filename),
             filename: filename
         };
 
