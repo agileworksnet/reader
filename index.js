@@ -18,12 +18,16 @@ function getDirectoryContent(req, res, next) {
         res.locals.filenames = files.filter((filename) => {
 
             if(filename.match(/^(?!\.).*$/)) {
-                return {
-                    link: baseUrl + btoa(`${directoryPathStorage}/${filename}`),
-                    filename: filename
-                };
+                return filename;
             }
 
+        });
+
+        res.locals.filenames = res.locals.filenames.map(function(filename) {
+            return {
+                link: baseUrl + btoa(`${directoryPathStorage}/${filename}`),
+                filename: filename
+            };
         });
 
         next();
