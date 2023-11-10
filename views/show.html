@@ -1,13 +1,39 @@
 <%- include('partials/head.ejs') %>
 
-<seciton class="content">
-    <div class="container-fluid">
-        <div class="px-4 py-5 mt-3 text-left">
-            <pre>
-                <%= file %>
-            </pre>
+    <seciton class="content">
+        <div class="container-fluid">
+            <div class="p-4 mt-2">
+                
+                <div id="file-content">
+                    <%= file %>
+                </div>
+
+                <div class="search-input mb-4">
+                    <input type="text" id="myInput" class="form-control" onkeyup="myFunction()" placeholder="Search file by name...">
+                </div>
+
+                <table id="myTable">
+                    <tbody id="parsed-file"></tbody>
+                </table>
+            </div>
         </div>
-    </div>    
-</seciton>
+    </seciton>
+
+    <script>
+        const string = document.getElementById('file-content').textContent;
+        const lines = string.split("\n");
+
+        for (const line of lines) {
+
+            if(line !== "") {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `<td>${line.trim()}</td>`;
+                document.getElementById('parsed-file').appendChild(tr);
+            }
+
+            document.getElementById('file-content').style.display = 'none';
+
+        }
+    </script>
 
 <%- include('partials/footer.ejs') %>

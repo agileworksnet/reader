@@ -14,36 +14,49 @@ function getDirectoryContent(req, res, next) {
 
     function readAllFilesRecursively(directoryPath) {
 
-        fs.readdirSync(directoryPath).forEach((filename) => {
-            const filePath = directoryPath + "/" + filename;
+        fs.readdirSync(directoryPath, { pattern: '*.log' })
+            .forEach((filename) => {
+                
+                const filePath = directoryPath + "/" + filename;
+                
+                if (fs.statSync(filePath).isFile()) {
 
-            if (fs.statSync(filePath).isFile()) {
+                    // Exclude dotFiles
+                    if (filename.match(/^(?!\.).*$/)) {
+                        if(filename.endsWith('.log')) {
+                            files.push(filePath);
+                        }
+                    }
 
-                if (filename.match(/^(?!\.).*$/)) {
-                    files.push(filePath);
+                } else if (fs.statSync(filePath).isDirectory()) {
+                    readAllFilesRecursively(filePath);
                 }
 
-            } else if (fs.statSync(filePath).isDirectory()) {
-                readAllFilesRecursively(filePath);
-            }
-        });
+            });
     }
 
 
     // Cargamos los archivos
     readAllFilesRecursively(directoryPathStorage);
 
-    // Ordenar archivos por orden alfabético
-    res.locals.filenames = files.sort((a, b) => a - b);
-
     // Construimos los objetos de archivo
-    res.locals.filenames = files.map(function (filename) {
+    res.locals.filenames = files.map(function (filePath) {
+
+        const fileStats = fs.statSync(filePath);
+        const fileName = path.basename(filePath);
 
         return {
-            link: baseUrlPath + '/read/' + btoa(filename),
-            filename: filename
+            link: baseUrlPath + '/read/' + btoa(filePath),
+            name: fileName,
+            path: filePath,
+            ctime: fileStats.ctime
         };
 
+    });
+
+    // Ordenar archivos por orden alfabético
+    res.locals.filenames.sort((a, b) => {
+        return b.ctime - a.ctime;
     });
 
     next();
@@ -77,6 +90,7 @@ app.set("views", __dirname + "/views")
 app.get('/', getDirectoryContent, function (req, res) {
 
     res.render(__dirname + "/views/index.html", {
+        basePath: baseUrlPath,
         files: res.locals.filenames,
         hasFiles: res.locals.filenames.length > 0
     });
@@ -85,9 +99,8 @@ app.get('/', getDirectoryContent, function (req, res) {
 
 app.get('/read/:file', getFileContent, (req, res) => {
 
-    console.log(res.locals.file);
-
     res.render(__dirname + "/views/show.html", {
+        basePath: baseUrlPath,
         file: res.locals.file
     });
 
