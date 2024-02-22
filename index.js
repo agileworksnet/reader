@@ -6,7 +6,7 @@ const app = express();
 //joining path of directory 
 // joining path of directory 
 const directoryPathStorage = path.join(__dirname, 'storage');
-const baseUrlPath          = process.env.BASE_URL_PATH || "";
+const baseUrlPath          = process.env.BASE_URL_PATH || "/";
 const getFileContent       = require('./src/FileContentMiddleware');
 const getDirectoryContent  = require('./src/DirectoryContentMiddleware')(
     directoryPathStorage
