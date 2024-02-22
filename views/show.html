@@ -9,7 +9,18 @@
                 </div>
 
                 <div class="search-input mb-4">
-                    <input type="text" id="myInput" class="form-control" onkeyup="myFunction()" placeholder="Search file by name...">
+                    <nav class="navbar bg-body-tertiary">
+                        <form class="container-fluid">
+                            <div class="input-group">
+                              <span class="input-group-text" id="basic-addon1">
+                                <a href="<%= basePath %>">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                              </span>
+                              <input type="text" id="myInput" class="form-control" onkeyup="myFunction()" placeholder="Filter file content..." aria-label="Filter file content..." aria-describedby="basic-addon1">
+                            </div>
+                          </form>
+                    </nav>
                 </div>
 
                 <table id="myTable">
