@@ -1,20 +1,13 @@
-# Use an official Node.js runtime as a parent image
-FROM node:18
-
-# Set the working directory in the container
+# Etapa de construcción
+FROM node:18-alpine AS builder
 WORKDIR /usr/src/app
-
-# Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
+RUN npm ci --only=production
 
-# Install application dependencies
-RUN npm install
-
-# Copy the rest of your application code to the working directory
+# Etapa de producción
+FROM node:18-alpine
+WORKDIR /usr/src/app
+COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY . .
-
-# Expose a port that your application will listen on
 EXPOSE 3000
-
-# Define the command to start your application
-CMD [ "node", "index.js" ]
+CMD ["node", "index.js"]
