@@ -1,48 +1,73 @@
 <%- include('partials/head.ejs') %>
 
-    <section class="logs">
-        <div class="container-fluid mt-5">
+    <div class="container-fluid">
 
-            <div class="search-input mb-4">
-                <input type="text" id="myInput" class="form-control" onkeyup="myFunction()" placeholder="Search log file by name...">
+        <div class="card">
+            <div class="card-header">
+                <div class="search-input">
+                    <input type="text" id="myInput" class="form-control"
+                           onkeyup="searchOnTable()" placeholder="Search log file...">
+                </div>
             </div>
-
-            <div class="d-flex flex-column justify-content-center align-items-start">
+            <div class="card-body">
 
                 <% if (hasFiles==true) { %>
-                    
-                    <table class="table" id="myTable">
+
+                <div class="table-responsive">
+                    <table class="table " id="myTable">
+                        <thead class="small text-uppercase bg-body text-muted">
+                        <tr>
+                            <th>
+                                Filename
+                            </th>
+                            <th>
+                                Location
+                            </th>
+                            <th>
+                                Create
+                            </th>
+                            <th></th>
+                        </tr>
+                        </thead>
                         <tbody>
-                            <% files.forEach(function(file){ %>
-                                <tr>
-                                    <td>
-                                        <a class="filename" href="<%= `${file.link}` %>">
-                                            <div class="filename-link">
-                                                <i class="fa-solid fa-file-lines"></i> <%= file.name %> 
-                                                <div class="filename-description">
-                                                    <small class="text-muted">
-                                                        <i class="fa-solid fa-clock"></i>
-                                                        <%= file.ctime %> on <%= file.path %>
-                                                    </small>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <% }) %>
+                        <% files.forEach(function(file){ %>
+                        <tr>
+                            <td>
+                                <b>
+                                    <%= file.name %>
+                                </b>
+                            </td>
+                            <td>
+                                <%= file.path %>
+                            </td>
+                            <td>
+                                <i class="fa-solid fa-clock mr-1"></i>
+                                <%= file.ctime %>
+                            </td>
+                            <td>
+                                <a class="filename" href="<%= `${file.link}` %>">
+                                    View content
+                                </a>
+                            </td>
+                        </tr>
+                        <% }) %>
                         </tbody>
                     </table>
+                </div>
 
-                    <% } else { %>
+                <% } else { %>
 
-                        <p>
-                            There aren't files.
-                        </p>
+                <div class="alert alert-warning">
+                    <p class="mb-0">
+                        Log files not found.
+                    </p>
+                </div>
 
-                    <% } %>
+                <% } %>
 
             </div>
         </div>
-    </section>
+
+    </div>
 
 <%- include('partials/footer.ejs') %>

@@ -3,10 +3,11 @@ const path = require('path');
 const express = require('express');
 const app = express();
 
-//joining path of directory 
-// joining path of directory 
+const baseUrlPath     = process.env.BASE_URL_PATH     || "/";
+const applicationTitle= process.env.APPLICATION_TITLE || "agileworksnet/reader: read your logs files on the browser";
+const applicationName = process.env.APPLICATION_NAME  || "agileworksnet/reader";
+
 const directoryPathStorage = path.join(__dirname, 'storage');
-const baseUrlPath          = process.env.BASE_URL_PATH || "/";
 const getFileContent       = require('./src/FileContentMiddleware');
 const getDirectoryContent  = require('./src/DirectoryContentMiddleware')(
     directoryPathStorage
@@ -22,6 +23,8 @@ app.get('/', getDirectoryContent, function (req, res) {
 
     res.render(__dirname + "/views/index.html", {
         basePath: baseUrlPath,
+        applicationTitle: applicationTitle,
+        applicationName: applicationName,
         files: res.locals.filenames,
         hasFiles: res.locals.filenames.length > 0
     });
@@ -32,6 +35,8 @@ app.get('/read/:file', getFileContent, (req, res) => {
     
     res.render(__dirname + "/views/show.html", {
         basePath: baseUrlPath,
+        applicationTitle: applicationTitle,
+        applicationName: applicationName,
         file: res.locals.file
     });
 

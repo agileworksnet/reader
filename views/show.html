@@ -1,30 +1,40 @@
 <%- include('partials/head.ejs') %>
 
-    <section class="content">
-        <div class="container-fluid mt-5">
+    <div class="comeback-index mb-3">
+        <a class="btn btn-outline-primary" href="<%= basePath %>">
+            <i class="fa-solid fa-arrow-left-long"></i> go to files
+        </a>
+    </div>
 
-            <div class="search-input mb-4">
-                <div class="input-group">
-                    <span class="input-group-text" id="basic-addon1">
-                        <a href="<%= basePath %>">
-                            <i class="fa-solid fa-arrow-left-long"></i>
-                        </a>
-                    </span>
-                    <input type="text" id="myInput" class="form-control" onkeyup="myFunction()"
-                        placeholder="Filter file content..." aria-label="Filter file content..."
-                        aria-describedby="basic-addon1">
-                </div>
+    <div class="card">
+        <div class="card-header">
+            <div class="search-input">
+                <input type="text" id="myInput" class="form-control" onkeyup="searchOnTable()"
+                       placeholder="Search on the file content" aria-label="Search the file content"
+                       aria-describedby="file-content">
             </div>
+        </div>
+        <div class="card-body">
 
             <div id="file-content">
                 <%= file %>
             </div>
 
-            <table id="myTable">
-                <tbody id="parsed-file"></tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table" id="myTable">
+                    <thead class="small text-uppercase bg-body text-muted">
+                        <tr>
+                            <th>
+                                File content
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="parsed-file"></tbody>
+                </table>
+            </div>
+
         </div>
-    </section>
+    </div>
 
     <script>
         const string = document.getElementById('file-content').textContent;

@@ -1,14 +1,14 @@
-version: '3.9'
-
 services:
 
-  api:
-    container_name: log-viewer
-    image: log-viewer
+  reader:
+    container_name: reader
+    image: agileworksnet/reader:latest
     restart: always
     build:
       context: ./
       dockerfile: Dockerfile
+    env_file:
+      - .env
     volumes:
       - ./storage:/usr/src/app/storage
     ports:
